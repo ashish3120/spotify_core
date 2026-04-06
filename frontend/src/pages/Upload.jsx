@@ -8,21 +8,30 @@ export default function Upload() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) return toast.error('Please select a music file');
     setLoading(true);
+    setUploadProgress(0);
     try {
       const formData = new FormData();
       formData.append('title', title);
       formData.append('music', file);
+      
       await API.post('/music/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(progress);
+        },
       });
+      
       toast.success('Track uploaded successfully!');
       setTitle('');
       setFile(null);
+      setUploadProgress(0);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Upload failed');
     } finally {
@@ -88,11 +97,26 @@ export default function Upload() {
           />
         </div>
 
+        {loading && (
+          <div className="upload-progress-section">
+            <div className="progress-container">
+              <div 
+                className="progress-bar" 
+                style={{ width: `${uploadProgress}%` }}
+              ></div>
+            </div>
+            <div className="progress-info">
+              <span>Uploading...</span>
+              <span>{uploadProgress}%</span>
+            </div>
+          </div>
+        )}
+
         <button type="submit" className="auth-btn upload-btn" disabled={loading}>
           {loading ? (
             <>
               <div className="spinner spinner--small"></div>
-              Uploading...
+              Processing...
             </>
           ) : (
             'Upload Track'
