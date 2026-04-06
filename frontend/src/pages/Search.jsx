@@ -85,14 +85,12 @@ export default function Search() {
             </div>
           )}
 
-          {!query && (
+          {!query && musics.length > 0 && (
             <section className="home-section">
-              <h2 className="section-title">Browse All</h2>
-              <div className="browse-grid">
-                {['Pop', 'Rock', 'Hip-Hop', 'Jazz', 'Electronic', 'Classical', 'R&B', 'Indie'].map((genre, i) => (
-                  <div key={genre} className="browse-card" style={{ '--hue': i * 45 }}>
-                    <span>{genre}</span>
-                  </div>
+              <h2 className="section-title">Top 10 Songs</h2>
+              <div className="card-grid">
+                {musics.slice(0, 10).map(track => (
+                  <TrackCard key={track._id} track={track} trackList={musics} />
                 ))}
               </div>
             </section>
