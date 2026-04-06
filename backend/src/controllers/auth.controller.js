@@ -39,7 +39,7 @@ async function registerUser(req, res) {
     res.cookie("token", token, {
         httpOnly: true,
         sameSite: "none",
-        secure: true
+        secure: true // Keep secure: true for now since backend is on Render HTTPS
     })
 
     res.status(201).json({
