@@ -99,7 +99,7 @@ async function createAlbum(req, res) {
 async function geAllMusics(req, res) {
     //we should not give all the music to the user as no of songs can be too much
     // const musics = await musicModel.find().populate("artist", "username") //populate will here give the data of artist instead of id 
-    const musics = await musicModel.find().skip(2).limit(1).populate("artist", "username") //limit will give only 1 song as we have set limit to 1 which is the upper limit skip will skip the first 2 songs
+    const musics = await musicModel.find().limit(20).populate("artist", "username") //limit will give only 1 song as we have set limit to 1 which is the upper limit skip will skip the first 2 songs
 
     res.status(200).json({
         message: "Musics fetched successfully",
