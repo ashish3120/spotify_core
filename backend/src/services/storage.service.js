@@ -6,11 +6,11 @@ const ImageKitClient = new ImageKit({
     privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
 });
 
-async function uploadFile(file, fileName) {
+async function uploadFile(file) {
     const result = await ImageKitClient.files.upload({
-        file: file, // ImageKit supports Buffer directly
-        fileName: fileName || "music_" + Date.now(),
-        folder: "spotify/music" // changed folder name to spotify for better organization
+        file: file.toString("base64"),
+        fileName: "music_" + Date.now(),
+        folder: "yt-complete-backend/music"
     })
     return {
         url: result.url
