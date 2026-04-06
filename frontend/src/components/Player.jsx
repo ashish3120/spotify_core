@@ -55,9 +55,12 @@ export default function Player() {
             type="range"
             className="player-slider"
             min={0}
-            max={duration || 0}
+            max={duration || 100} // Default to 100 if duration is 0
             value={progress}
             onChange={(e) => seek(Number(e.target.value))}
+            style={{
+              background: `linear-gradient(to right, var(--green) ${duration > 0 ? (progress / duration) * 100 : 0}%, rgba(255, 255, 255, 0.15) ${duration > 0 ? (progress / duration) * 100 : 0}%)`
+            }}
           />
           <span className="player-time">{formatTime(duration)}</span>
         </div>
@@ -75,6 +78,9 @@ export default function Player() {
           step={0.01}
           value={volume}
           onChange={(e) => changeVolume(Number(e.target.value))}
+          style={{
+            background: `linear-gradient(to right, var(--green) ${volume * 100}%, rgba(255, 255, 255, 0.15) ${volume * 100}%)`
+          }}
         />
       </div>
     </footer>
