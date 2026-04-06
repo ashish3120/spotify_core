@@ -1,146 +1,82 @@
-# Spotify Clone - Backend API Documentation
+# 🎵 Spotify Clone
 
-Welcome to the backend API for the Spotify Clone project! This guide is designed to help you integrate the frontend seamlessly with this backend.
+A full-stack, premium music streaming platform inspired by Spotify, featuring real-time music uploads, dynamic artist themes, and a responsive modern interface.
 
-## 🚀 Getting Started
+## 🚀 Live Demo
 
-### Backend URL
-`http://localhost:3000`
-
-### Prerequisites for Frontend Integration
-- **Axios** (Recommended for HTTP requests)
-- **Cookie management**: Enable `withCredentials: true` in your Axios configuration (crucial for authentication).
-
-> [!NOTE]
-> If your `package.json` file is missing in the `backend` folder, you might need to recreate it. Run `npm init -y` and install the dependencies: `npm install express mongoose jsonwebtoken bcryptjs cookie-parser multer @imagekit/nodejs dotenv cors`.
+- **Frontend (Vercel)**: [https://spotify-taupe-five.vercel.app/login](https://spotify-taupe-five.vercel.app/login)
+- **Backend (Render)**: [https://spotify-core.onrender.com](https://spotify-core.onrender.com)
 
 ---
 
-## 🚀 Deployment on Render
+## ✨ Features
 
-This project is pre-configured for deployment on [Render](https://render.com/).
+### 🎨 Premium UI/UX
+- **Modern Design**: Sleek dark mode with glassmorphism and smooth transitions.
+- **Dynamic Artist Theme**: Automatic UI shift! Artists get a rich **Purple Theme**, while listeners enjoy the classic **Spotify Green**.
+- **Responsive Layout**: Designed for seamless experience across all screen sizes.
 
-### Quick Deploy Steps:
-1. **Push your code to GitHub**: Ensure the `backend/` folder and the root `render.yaml` are committed.
-2. **Connect to Render**:
-   - Log in to your Render dashboard.
-   - Click **"New +"** → **"Blueprint"**.
-   - Select your GitHub repository.
-3. **Configure Environment Variables**: Render will prompt you to provide the values for the following (copy them from your local `.env`):
-   - `MONGODB_URI`
-   - `JWT_SECRET`
-   - `IMAGEKIT_PRIVATE_KEY`
-4. **Deploy!** Render will automatically build the `backend/` directory using the `render.yaml` configuration.
+### 🎧 Music & Playback
+- **Infinite Streaming**: Direct audio streaming from high-speed storage.
+- **Smart Search**: Find your favorite tracks and artists instantly, with "Top 10" trending suggestions.
+- **Player Controls**: Advanced playback with progress tracking, volume control, and play/pause functionality.
 
----
-
-## 🔐 Authentication System
-
-The backend uses **Cookie-based JWT Authentication**. When a user logs in or registers, the server sends an `httpOnly` cookie named `token`. 
-
-> [!IMPORTANT]
-> To maintain the user session across requests, you must set `withCredentials: true` in your API client (e.g., Axios).
-
-### User Roles
-1.  **user**: Basic listener. Can search music and view albums.
-2.  **artist**: Creative user. Can upload music and create albums.
+### 👩‍🎤 Artist Features
+- **Fast Uploads**: Optimized multipart/buffer uploads for high-performance track sharing.
+- **Album Management**: Create and manage albums with automatic track population.
+- **Upload Progress**: Real-time progress bars for large audio files.
 
 ---
 
-## 📂 API Endpoints
+## 🛠️ Tech Stack
 
-### 1. Authentication (`/api/auth`)
-
-| Endpoint | Method | Body Parameters | Description |
-| :--- | :--- | :--- | :--- |
-| `POST /api/auth/register` | `POST` | `username`, `email`, `password`, `role` (optional, default "user") | Registers a new user. Returns user info. |
-| `POST /api/auth/login` | `POST` | `username` (or `email`), `password` | Logs in the user and sets the auth cookie. |
-| `POST /api/auth/logout` | `POST` | (none) | Clears the auth cookie and logs out the user. |
-
-### 2. Music (`/api/music`)
-
-| Endpoint | Method | Requirements | Description |
-| :--- | :--- | :--- | :--- |
-| `POST /api/music/upload` | `POST` | Role: `artist` | Uploads music using `multipart/form-data`. Key: `music` (file), `title` (text). |
-| `GET /api/music/` | `GET` | Role: `user` or `artist` | Fetches all musics. (Note: Currently has internal skip/limit applied). |
-
-### 3. Albums (`/api/music/album`)
-
-| Endpoint | Method | Requirements | Description |
-| :--- | :--- | :--- | :--- |
-| `POST /api/music/album` | `POST` | Role: `artist` | Creates an album. Body: `{ "title": String, "musics": ["music_id1", "music_id2"] }`. |
-| `GET /api/music/album` | `GET` | Role: `user` or `artist` | Fetches all albums (only title and artist username). |
-| `GET /api/music/album/:albumId` | `GET` | Role: `user` or `artist` | Fetches details and songs of a specific album. |
+- **Frontend**: React, Vite, Axios, React Router, React Hot Toast, React Icons.
+- **Backend**: Node.js, Express, MongoDB (Mongoose), JWT (Cookie-based auth), Multer.
+- **Storage**: ImageKit (Optimized for fast audio delivery).
+- **Deployment**: Vercel (Frontend), Render (Backend).
 
 ---
 
-## 🏗️ Data Models (Schemas)
+## ⚙️ Setup & Installation
 
-### User
-```json
-{
-  "username": "string (unique)",
-  "email": "string (unique)",
-  "role": "enum ['artist', 'user']"
-}
+### 1. Clone the repository
+```bash
+git clone https://github.com/ashish3120/spotify_core.git
 ```
 
-### Music
-```json
-{
-  "title": "string",
-  "uri": "string (URL to audio source)",
-  "artist": "ObjectId (ref: user)"
-}
+### 2. Configure Environment Variables
+Create a `.env` file in the `backend` directory:
+```env
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_secret_key
+IMAGEKIT_PRIVATE_KEY=your_private_key
+IMAGEKIT_PUBLIC_KEY=your_public_key
+IMAGEKIT_URL_ENDPOINT=your_url_endpoint
 ```
 
-### Album
-```json
-{
-  "title": "string",
-  "artist": "ObjectId (ref: user)",
-  "musics": ["ObjectId (ref: music)"]
-}
+### 3. Install & Start
+**Backend:**
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
 ---
 
-## 🛠️ Frontend Implementation Tips
+## ⚡ Maintenance & Cold Start
+Since the backend is hosted on Render's Free tier, it might experience a "cold start" (15-20 second delay) after 15 minutes of inactivity. 
 
-### Setting up Axios Global Configuration
-```javascript
-import axios from 'axios';
-
-const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
-  withCredentials: true  // Required for cookies
-});
-
-export default api;
-```
-
-### Handling Multi-part Uploads (For Artists)
-```javascript
-const formData = new FormData();
-formData.append('title', 'My Secret Song');
-formData.append('music', fileObject);
-
-const response = await api.post('/music/upload', formData, {
-  headers: { 'Content-Type': 'multipart/form-data' }
-});
-```
-
-### Note on CORS
-If you host your frontend on a different port (e.g., `localhost:5173`), you **must** install and configure the `cors` package in the backend `app.js`:
-```javascript
-const cors = require('cors');
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-```
+**Recommendation**: Set up a free monitor at [UptimeRobot](https://uptimerobot.com/) to ping `https://spotify-core.onrender.com/api/ping` every 10 minutes to keep the server awake 24/7.
 
 ---
 
-## ⚙️ Environment Configuration (Backend)
-Ensure your `.env` file contains:
-- `MONGODB_URI`: Your MongoDB connection string.
-- `JWT_SECRET`: A secure string for signing tokens.
-- `IMAGEKIT_PRIVATE_KEY`: For music file storage.
+## 🔐 License
+This project is for educational purposes. Feel free to fork and build upon it!
