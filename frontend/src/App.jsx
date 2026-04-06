@@ -43,10 +43,25 @@ function GuestRoute() {
   return <Outlet />;
 }
 
+function ThemeManager() {
+  const { user } = useAuth();
+  
+  useEffect(() => {
+    if (user?.role === 'artist') {
+      document.documentElement.setAttribute('data-theme', 'artist');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }, [user]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <ThemeManager />
         <Toaster
           position="top-right"
           toastOptions={{
