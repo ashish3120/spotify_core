@@ -36,7 +36,11 @@ async function registerUser(req, res) {
         role: user.role,
     }, process.env.JWT_SECRET)
 
-    res.cookie("token", token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true
+    })
 
     res.status(201).json({
         message: "User registered successfully",
@@ -81,7 +85,8 @@ async function loginUser(req, res) {
 
     res.cookie("token", token, {
         httpOnly: true,
-        sameSite: "lax"
+        sameSite: "none",
+        secure: true
     })
 
     res.status(200).json({
@@ -97,7 +102,11 @@ async function loginUser(req, res) {
 }
 
 async function logoutUser(req, res) {
-    res.clearCookie("token")
+    res.clearCookie("token", {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true
+    })
     res.status(200).json({
         message: "User logged out successfully"
     })
