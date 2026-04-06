@@ -5,7 +5,6 @@ A full-stack, premium music streaming platform inspired by Spotify, featuring re
 ## 🚀 Live Demo
 
 - **Frontend (Vercel)**: [https://spotify-taupe-five.vercel.app/login](https://spotify-taupe-five.vercel.app/login)
-- **Backend (Render)**: [https://spotify-core.onrender.com](https://spotify-core.onrender.com)
 
 ---
 
