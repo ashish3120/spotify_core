@@ -118,7 +118,15 @@ async function getAllAlbums(req, res) {
 
 async function getAlbumById(req, res) {
     const albumId = req.params.albumId
-    const album = await albumModel.findById(albumId).populate("artist", "username")
+    const album = await albumModel.findById(albumId)
+        .populate("artist", "username")
+        .populate({
+            path: "musics",
+            populate: {
+                path: "artist",
+                select: "username"
+            }
+        })
 
     if (!album) {
         return res.status(404).json({
