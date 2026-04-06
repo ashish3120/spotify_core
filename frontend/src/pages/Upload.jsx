@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import toast from 'react-hot-toast';
 import { MdCloudUpload } from 'react-icons/md';
@@ -9,6 +10,7 @@ export default function Upload() {
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,6 +34,12 @@ export default function Upload() {
       setTitle('');
       setFile(null);
       setUploadProgress(0);
+
+      // Navigate to home page after a short delay so user can see success toast
+      setTimeout(() => {
+        navigate('/');
+      }, 1500);
+
     } catch (err) {
       toast.error(err.response?.data?.message || 'Upload failed');
     } finally {
