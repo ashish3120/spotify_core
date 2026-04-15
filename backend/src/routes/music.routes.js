@@ -3,10 +3,10 @@ const musicController = require("../controllers/music.controller")
 const router = express.Router()
 const authMiddleware = require("../middleware/auth.middleware")
 
-const multer = require('multer')
+const multer = require('multer') //multer is used for handling file uploads
 
 const upload = multer({
-    storage: multer.memoryStorage(),
+    storage: multer.memoryStorage(), //multer stores files in memory
     // limits: {
     //     fileSize: 10 * 1024 * 1024
     // }
