@@ -7,9 +7,16 @@ const multer = require('multer') //multer is used for handling file uploads
 
 const upload = multer({
     storage: multer.memoryStorage(), //multer stores files in memory
-    // limits: {
-    //     fileSize: 10 * 1024 * 1024
-    // }
+    limits: {
+        fileSize: 50 * 1024 * 1024 // 50 MB max
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('audio/')) {
+            cb(null, true)
+        } else {
+            cb(new Error('Only audio files are allowed'), false)
+        }
+    }
 })
 
 
