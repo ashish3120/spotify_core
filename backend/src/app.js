@@ -7,7 +7,7 @@ const musicRoutes = require("./routes/music.routes")
 const app = express()
 
 app.use(cors({
-    origin: ['https://spotify-taupe-five.vercel.app', 'http://localhost:5173', 'http://localhost:5174'],
+    origin: ['https://spotify-core.vercel.app', 'https://spotify-taupe-five.vercel.app', 'http://localhost:5173', 'http://localhost:5174'],
     credentials: true
 }))
 app.use(express.json())
