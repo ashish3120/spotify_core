@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://spotify-core.onrender.com/api';
+let rawApiUrl = import.meta.env.VITE_API_URL || 'https://spotify-core.onrender.com/api';
+if (rawApiUrl && !rawApiUrl.endsWith('/api')) {
+  rawApiUrl = rawApiUrl.replace(/\/+$/, '') + '/api';
+}
+const API_URL = rawApiUrl;
 
 const API = axios.create({
   baseURL: API_URL,
